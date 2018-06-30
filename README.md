@@ -1,7 +1,8 @@
 # vue-music
 
 > personal private vue-music-app test -programe
->2018/6/30 programe dist directory created
+#2018/6/30 
+programe dist directory created
 
 <!-- ## Build Setup
 
