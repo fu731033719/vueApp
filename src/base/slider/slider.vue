@@ -5,7 +5,7 @@
       </slot>
     </div>
     <div class="dots">
-      <span class="dots" v-for="item in dots" :key="item"></span>
+      <span class="dot" :class="{active: currentPageIndex === index}" v-for="(item,index) in dots" :key="item"></span>
     </div>
   </div>
 </template>
@@ -15,7 +15,8 @@ import {addClass} from 'common/js/dom'
 export default {
   data() {
     return {
-      dots: []
+      dots: [],
+      currentPageIndex: 0
     }
   },
   props: {
@@ -37,10 +38,19 @@ export default {
       this._setSliderWidth()
       this._initDots()
       this._initSliser()
+      if (this.autoPlay) {
+        this._play()
+      }
     }, 20)
+    window.addEventListener('resize', () => {
+      if (!this.slider) {
+        return
+      }
+      this._setSliderWidth(true)
+    })
   },
   methods: {
-    _setSliderWidth() {
+    _setSliderWidth(isResize) {
       this.children = this.$refs.sliderGroup.children
       let width = 0
       let sliderWidth = this.$refs.slider.clientWidth
@@ -51,7 +61,7 @@ export default {
         width += sliderWidth
       }
 
-      if (this.loop) {
+      if (this.loop && !isResize) {
         width += 2 * sliderWidth
       }
       this.$refs.sliderGroup.style.width = width + 'px'
@@ -67,9 +77,28 @@ export default {
         snap: true,
         snapLoop: this.loop,
         snapThreshold: 0.3,
-        snapSpeed: 400,
-        click: true
+        snapSpeed: 400
       })
+      this.slider.on('scrollEnd', () => {
+        let pageIndex = this.slider.getCurrentPage().pageX
+        if (this.loop) {
+          pageIndex -= 1
+        }
+        this.currentPageIndex = pageIndex
+        if (this.autoPlay) {
+          clearTimeout(this.timer)
+          this._play()
+        }
+      })
+    },
+    _play() {
+      let pageIndex = this.currentPageIndex + 1
+      if (this.loop) {
+        pageIndex += 1
+      }
+      this.timer = setTimeout(() => {
+        this.slider.goToPage(pageIndex, 0, 1000)
+      }, this.interval)
     }
   }
 }
@@ -109,6 +138,7 @@ export default {
         height: 8px
         border-radius: 50%
         background: $color-text-l
+        transition .2s
         &.active
           width: 20px
           border-radius: 5px
