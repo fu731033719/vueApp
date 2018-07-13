@@ -21,7 +21,7 @@ export function getDistList() {
     needNewCode: 0,
     categoryId: 10000000,
     rnd: Math.random(),
-    format: 'json'
+    
   })
   return axios.get(url, {
     param: data
