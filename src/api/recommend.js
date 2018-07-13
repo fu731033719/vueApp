@@ -11,7 +11,8 @@ export function getRecommend() {
   return jsonp(url, data, options)
 }
 export function getDistList() {
-  const url = '/api/getDistList'
+  const timer = new Date().getTime().toString()
+  const url = `/api/getDistList?time=${timer}`
   const data = Object.assign({}, commonParams, {
     platform: 'yqq',
     houtUin: 0,
@@ -20,8 +21,7 @@ export function getDistList() {
     sortId: 5,
     needNewCode: 0,
     categoryId: 10000000,
-    rnd: Math.random(),
-    
+    rnd: Math.random()
   })
   return axios.get(url, {
     param: data
