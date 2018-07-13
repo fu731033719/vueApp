@@ -86,7 +86,6 @@ export default {
         }
         this.currentPageIndex = pageIndex
         if (this.autoPlay) {
-          clearTimeout(this.timer)
           this._play()
         }
       })
@@ -100,6 +99,9 @@ export default {
         this.slider.goToPage(pageIndex, 0, 1000)
       }, this.interval)
     }
+  },
+  destoryed() {
+    clearTimeout(this.timer)
   }
 }
 </script>

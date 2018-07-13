@@ -18,7 +18,7 @@
   </div>
 </template>
 <script>
-import {getRecommend} from 'api/recommend'
+import {getRecommend, getDistList} from 'api/recommend'
 import {ERR_OK} from 'api/config'
 import Slider from 'base/slider/slider'
 export default {
@@ -29,17 +29,19 @@ export default {
   },
   created() {
     this._getRecommend()
+    this._getDistList()
   },
   methods: {
     _getRecommend() {
-      console.log(getRecommend)
-      console.log(ERR_OK)
       getRecommend().then((res) => {
-        console.log(res)
         if (res.code === ERR_OK) {
-          console.log(res.data.slider)
           this.recommends = res.data.slider
         }
+      })
+    },
+    _getDistList() {
+      getDistList().then((res) => {
+        console.log(res)
       })
     }
   },
