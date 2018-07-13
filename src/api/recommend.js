@@ -20,7 +20,8 @@ export function getDistList() {
     sortId: 5,
     needNewCode: 0,
     categoryId: 10000000,
-    rnd: Math.random()
+    rnd: Math.random(),
+    format: 'json'
   })
   return axios.get(url, {
     param: data
