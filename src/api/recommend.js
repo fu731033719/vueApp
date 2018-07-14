@@ -10,9 +10,9 @@ export function getRecommend() {
   })
   return jsonp(url, data, options)
 }
-export function getDistList() {
-  const timer = new Date().getTime().toString()
-  const url = `/api/getDistList?time=${timer}`
+export function getDiscList() {
+  const date = new Date().getTime()
+  const url = `/api/getDiscList?time=${date}&platform=yyq&houtUin=0&sin=0&ein=29&sortId=5&needNewCode=0&categoryId=10000000&rnd=${Math.random()}&outCharset=utf-8`
   const data = Object.assign({}, commonParams, {
     platform: 'yqq',
     houtUin: 0,
@@ -21,7 +21,8 @@ export function getDistList() {
     sortId: 5,
     needNewCode: 0,
     categoryId: 10000000,
-    rnd: Math.random()
+    rnd: Math.random(),
+    outCharset: 'utf-8'
   })
   return axios.get(url, {
     param: data
