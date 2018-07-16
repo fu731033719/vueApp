@@ -1,33 +1,36 @@
 <template>
   <div class="recommend">
-    <div class="recommend-content">
-      <div v-if="recommends.length" class="slider-wrapper">
-        <slider>
-          <div v-for="item in recommends" :key="item.id">
-            <a :href = "item.linkUrl">
-              <img :src="item.picUrl">
-            </a>
-          </div>
-        </slider>
-      </div>
-      <div class="recommend-list">
-        <h1 class="list-title">热门歌曲推荐</h1>
-        <ul>
-          <li v-for="item in discList" :key="item.dissid" class="item">
-            <div class="icon">
-              <img width="60" height="60" :src="item.imgurl">
+    <scroll ref="scroll" class="recommend-content" :data="discList">
+      <div>
+        <div v-if="recommends.length" class="slider-wrapper">
+          <slider>
+            <div v-for="item in recommends" :key="item.id">
+              <a :href = "item.linkUrl">
+                <img :src="item.picUrl">
+              </a>
             </div>
-            <div class="text">
-              <h2 class="name" v-html="item.creator.name"></h2>
-              <p class="desc" v-html="item.dissname"></p>
-            </div>
-          </li>
-        </ul>
+          </slider>
+        </div>
+        <div class="recommend-list">
+          <h1 class="list-title">热门歌曲推荐</h1>
+          <ul>
+            <li v-for="item in discList" :key="item.dissid" class="item">
+              <div class="icon">
+                <img width="60" height="60" @load="loadImage" :src="item.imgurl">
+              </div>
+              <div class="text">
+                <h2 class="name" v-html="item.creator.name"></h2>
+                <p class="desc" v-html="item.dissname"></p>
+              </div>
+            </li>
+          </ul>
+        </div>
       </div>
-    </div>
+    </scroll>
   </div>
 </template>
 <script>
+import Scroll from 'base/scroll/scroll'
 import {getRecommend, getDiscList} from 'api/recommend'
 import {ERR_OK} from 'api/config'
 import Slider from 'base/slider/slider'
@@ -55,17 +58,22 @@ export default {
         let num1 = res.indexOf('(')
         let num2 = res.indexOf(')')
         let resultData = JSON.parse(res.substring(num1 + 1, num2))
-        console.log(typeof (resultData))
-        console.log(resultData)
         this.discList = resultData.data.list
         // if (res.code === ERR_OK) {
         //   this.discList = res.data.list
         // }
       })
+    },
+    loadImage() {
+      if (!this.checkLoaded) {
+        this.$refs.scroll.refresh()
+        this.checkLoaded = true
+      }
     }
   },
   components: {
-    Slider
+    Slider,
+    Scroll
   }
 }
 </script>
