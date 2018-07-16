@@ -13,9 +13,13 @@
       <div class="recommend-list">
         <h1 class="list-title">热门歌曲推荐</h1>
         <ul>
-          <li v-for="item in discList" :key="item" class="item">
+          <li v-for="item in discList" :key="item.dissid" class="item">
             <div class="icon">
-              <img :src="item">
+              <img width="60" height="60" :src="item.imgurl">
+            </div>
+            <div class="text">
+              <h2 class="name" v-html="item.creator.name"></h2>
+              <p class="desc" v-html="item.dissname"></p>
             </div>
           </li>
         </ul>
@@ -53,6 +57,7 @@ export default {
         let resultData = JSON.parse(res.substring(num1 + 1, num2))
         console.log(typeof (resultData))
         console.log(resultData)
+        this.discList = resultData.data.list
         // if (res.code === ERR_OK) {
         //   this.discList = res.data.list
         // }
